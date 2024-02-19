@@ -40,4 +40,25 @@ class Tauler {
         }
         echo '</div>';
     }
+
+    public function moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna) {
+        // Verificar que les coordenades estan dins dels límits del tauler
+        if ($origenFila < 0 || $origenFila >= $this->tamany || $origenColumna < 0 || $origenColumna >= $this->tamany ||
+            $destiFila < 0 || $destiFila >= $this->tamany || $destiColumna < 0 || $destiColumna >= $this->tamany) {
+            return false; // Coordenades fora dels límits
+        }
+
+        $casellaOrigen = $this->caselles[$origenFila][$origenColumna];
+        $casellaDesti = $this->caselles[$destiFila][$destiColumna];
+
+        // Verificar que la casella d'origen té una fitxa i la de destinació està buida
+        if ($casellaOrigen->ocupant && !$casellaDesti->ocupant) {
+            // Realitzar el moviment
+            $casellaDesti->ocupant = $casellaOrigen->ocupant;
+            $casellaOrigen->ocupant = null;
+            return true; // Moviment realitzat amb èxit
+        }
+
+        return false; // Moviment invàlid
+    }
 }
