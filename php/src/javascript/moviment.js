@@ -12,15 +12,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const caselles = document.querySelectorAll('.casella');
     caselles.forEach(casella => {
         casella.addEventListener('dragover', e => {
-            e.preventDefault(); // Permetre deixar anar
+            e.preventDefault(); // Permite el drop
         });
 
         casella.addEventListener('drop', e => {
-            e.preventDefault(); // Evitar comportament per defecte
-            if (!casella.querySelector('.fitxa') && fitxaArrossegada) {
-                casella.appendChild(fitxaArrossegada); // Moure la fitxa a la nova casella
-                fitxaArrossegada = null;
-            }
+            e.preventDefault(); // Prevenir comportamiento por defecto
+
+            // Obtener las coordenadas o identificadores de origen y destino
+            const origen = fitxaArrossegada.parentNode.dataset;
+            const destino = casella.dataset;
+
+            // Preparar los datos a enviar
+            const datos = { origenFila: origen.fila, origenColumna: origen.columna, destiFila: destino.fila , destiColumna: destino.columna};
+
+            // Realizar petición al servidor PHP
+            fetch('http://localhost/api/validarMoviment.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(datos),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.valid) {
+                        // Si el movimiento es válido, mover la pieza
+                        casella.appendChild(fitxaArrossegada);
+                    } else {
+                        // Si el movimiento no es válido, devolver la pieza a su posición original
+                        fitxaArrossegada.parentNode.appendChild(fitxaArrossegada);
+                    }
+                    fitxaArrossegada = null; // Limpiar la referencia
+                })
+                .catch(error => {
+                    console.error('Error en la petición:', error);
+                    // Manejar errores, posiblemente revertir el movimiento
+                    fitxaArrossegada.parentNode.appendChild(fitxaArrossegada);
+                    fitxaArrossegada = null;
+                });
         });
     });
 });
