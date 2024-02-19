@@ -63,6 +63,7 @@ class Tauler {
             // Realitzar el moviment
             $casellaDesti->ocupant = $casellaOrigen->ocupant;
             $casellaOrigen->ocupant = null;
+            $_SESSION['tauler'] = serialize($this);
             return true; // Moviment realitzat amb èxit
         }
 

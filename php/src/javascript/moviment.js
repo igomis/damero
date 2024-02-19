@@ -10,46 +10,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const caselles = document.querySelectorAll('.casella');
-    caselles.forEach(casella => {
-        casella.addEventListener('dragover', e => {
-            e.preventDefault(); // Permite el drop
-        });
+    caselles.forEach(casella => { // Corregit per utilitzar forEach amb 'casella'
+        casella.addEventListener('dragover', e => e.preventDefault()); // Permetre drop
+        casella.addEventListener('drop', function(e) {
+            e.preventDefault();
+            if (!fitxaArrossegada) return; // Comprova si hi ha una fitxa arrossegada
 
-        casella.addEventListener('drop', e => {
-            e.preventDefault(); // Prevenir comportamiento por defecto
-
-            // Obtener las coordenadas o identificadores de origen y destino
             const origen = fitxaArrossegada.parentNode.dataset;
-            const destino = casella.dataset;
+            const destino = this.dataset; // Utilitza 'this' per referir-se a la casella sobre la qual es fa el drop
 
-            // Preparar los datos a enviar
-            const datos = { origenFila: origen.fila, origenColumna: origen.columna, destiFila: destino.fila , destiColumna: destino.columna};
+            // Suposem que tens els inputs en el teu formulari per aquests valors
+            document.getElementById('origenFila').value = origen.fila;
+            document.getElementById('origenColumna').value = origen.columna;
+            document.getElementById('destinoFila').value = destino.fila;
+            document.getElementById('destinoColumna').value = destino.columna;
 
-            // Realizar petición al servidor PHP
-            fetch('http://localhost/api/validarMoviment.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(datos),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.valid) {
-                        // Si el movimiento es válido, mover la pieza
-                        casella.appendChild(fitxaArrossegada);
-                    } else {
-                        // Si el movimiento no es válido, devolver la pieza a su posición original
-                        fitxaArrossegada.parentNode.appendChild(fitxaArrossegada);
-                    }
-                    fitxaArrossegada = null; // Limpiar la referencia
-                })
-                .catch(error => {
-                    console.error('Error en la petición:', error);
-                    // Manejar errores, posiblemente revertir el movimiento
-                    fitxaArrossegada.parentNode.appendChild(fitxaArrossegada);
-                    fitxaArrossegada = null;
-                });
+            document.getElementById('movimentForm').submit(); // Envía el formulari
         });
     });
 });

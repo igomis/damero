@@ -14,6 +14,13 @@
     <?php
         echo $tauler->paint();
     ?>
+    <form id="movimentForm" action="processarMoviment.php" method="POST" style="display:none;">
+        <input type="hidden" name="origenFila" id="origenFila">
+        <input type="hidden" name="origenColumna" id="origenColumna">
+        <input type="hidden" name="destinoFila" id="destinoFila">
+        <input type="hidden" name="destinoColumna" id="destinoColumna">
+    </form>
+
     <script src="../javascript/moviment.js"></script>
 </body>
 </html>
