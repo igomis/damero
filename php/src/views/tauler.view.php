@@ -1,3 +1,6 @@
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'].'/classes/Tauler.php';
+?>
 <!DOCTYPE html>
 <html lang="ca">
 <head>
@@ -7,16 +10,9 @@
     <link rel="stylesheet" href="../css/damero.css">
 </head>
 <body>
-  <div class="taula-de-dames">
     <?php
-          for ($fila = 0; $fila < 8; $fila++) {
-              for ($columna = 0; $columna < 8; $columna++) {
-                  // Alternem els colors de les caselles
-                  $classeCasella = ($fila + $columna) % 2 == 0 ? 'blanc' : 'negre';
-                  echo "<div class='$classeCasella'></div>";
-              }
-          }
-  ?>
-  </div>
+        $tauler = new Tauler();
+        echo $tauler->generarHTML();
+    ?>
 </body>
 </html>
