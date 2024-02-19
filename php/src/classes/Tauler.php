@@ -1,40 +1,41 @@
 <?php
 
 class Tauler {
-    private $tamany; // Tamany del tauler, típicament 8 per a dames
-    private $dades;
+    private $tamany; // Tamany del tauler
+    private $caselles = []; // Array per emmagatzemar objectes Casella
 
     public function __construct($tamany = 8) {
         $this->tamany = $tamany;
-        $this->taulerInicial();
+        $this->inicialitzarCaselles();
     }
 
-    public function taulerInicial() {
-        $this->dades = [];
+    private function inicialitzarCaselles() {
         for ($fila = 0; $fila < $this->tamany; $fila++) {
             for ($columna = 0; $columna < $this->tamany; $columna++) {
-                // Definim el color de la casella
                 $colorCasella = ($fila + $columna) % 2 == 0 ? 'blanc' : 'negre';
-                $fitxa = null;
-
-                // Posicionem les fitxes per a cada jugador en les tres primeres files de cada costat
-                if ($colorCasella == 'negre' && $fila < 3) {
-                    $fitxa = 'fitxa-jugador1';
-                } elseif ($colorCasella == 'negre' && $fila > 4) {
-                    $fitxa = 'fitxa-jugador2';
+                $ocupant = null;
+                if ($colorCasella == 'negre') {
+                    if ($fila < 3) {
+                        $ocupant = 'jugador1';
+                    } elseif ($fila > 4) {
+                        $ocupant = 'jugador2';
+                    }
                 }
-
-                $this->dades[$fila][$columna] = ['color' => $colorCasella, 'fitxa' => $fitxa];
+                $this->caselles[$fila][$columna] = new Casella($colorCasella, $ocupant);
             }
         }
     }
 
+    public function obtenirCaselles() {
+        return $this->caselles;
+    }
+
     public function paint() {
         echo '<div class="taula-de-dames">';
-        foreach ($this->dades as $fila) {
+        foreach ($this->caselles as $fila) {
             foreach ($fila as $casella) {
-                $classeFitxa = $casella['fitxa'] ? " " . $casella['fitxa'] : "";
-                echo "<div class='{$casella['color']}{$classeFitxa}'></div>";
+                $classeOcupant = $casella->ocupant ? " fitxa-{$casella->ocupant}" : "";
+                echo "<div class='casella {$casella->color}{$classeOcupant}'></div>";
             }
         }
         echo '</div>';
