@@ -32,12 +32,24 @@ class Tauler {
 
     public function paint() {
         echo '<div class="taula-de-dames">';
-        foreach ($this->caselles as $fila) {
+        echo '<div class="capcalera-coordenades"></div>'; // Espai buit a l'esquerra superior
+        for ($col = 0; $col < 8; $col++) {
+            echo "<div class='coordenada'>".chr(65+$col)."</div>"; // A, B, C...
+        }
+        echo '<div class="buit"></div>'; // Final de fila de capçalera
+        foreach ($this->caselles as $filaNum => $fila) {
+            echo "<div class='coordenada'>".($filaNum+1)."</div>"; // Coordenades de fila
             foreach ($fila as $casella) {
                 $classeOcupant = $casella->ocupant ? " fitxa-{$casella->ocupant}" : "";
                 echo "<div class='casella {$casella->color}{$classeOcupant}'></div>";
             }
+            echo "<div class='coordenada'>".($filaNum+1)."</div>";
         }
+        echo '<div class="buit"></div>'; // Espai buit a l'inici de la fila inferior
+        for ($col = 0; $col < 8; $col++) {
+            echo "<div class='coordenada'>".chr(65+$col)."</div>"; // A, B, C...
+        }
+        echo '<div class="capcalera-coordenades"></div>';
         echo '</div>';
     }
 
@@ -52,7 +64,7 @@ class Tauler {
         $casellaDesti = $this->caselles[$destiFila][$destiColumna];
 
         // Verificar que la casella d'origen té una fitxa i la de destinació està buida
-        if ($casellaOrigen->ocupant && !$casellaDesti->ocupant) {
+        if ($casellaOrigen->ocupant && !$casellaDesti->ocupant && $casellaDesti->color == 'negre') {
             // Realitzar el moviment
             $casellaDesti->ocupant = $casellaOrigen->ocupant;
             $casellaOrigen->ocupant = null;

@@ -8,8 +8,9 @@ body {
 
 .taula-de-dames {
     display: grid;
-    grid-template-columns: repeat(8, 60px); /* Ajusta la mida de les caselles */
-    grid-template-rows: repeat(8, 60px);
+    grid-template-columns: repeat(10, 60px); /* Ajusta la mida de les caselles */
+    grid-auto-rows: auto;
+    justify-content: center;
     gap: 2px;
 }
 
@@ -46,4 +47,18 @@ body {
 .taula-de-dames div.negre.fitxa-jugador2::before {
     background-color: #000; /* Color de les fitxes del jugador 2 */
     box-shadow: 0 2px 4px rgba(255,255,255,0.3);
+}
+
+.capcalera-coordenades, .buit {
+    width: 60px;
+    height: 30px; /* Ajusta segons necessitat */
+}
+.coordenada {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 30px; /* Ajusta segons necessitat */
+    font-family: Arial, sans-serif;
+    font-size: 14px;
 }
