@@ -1,6 +1,3 @@
-<?php
-require_once $_SERVER['DOCUMENT_ROOT'].'/classes/Tauler.php';
-?>
 <!DOCTYPE html>
 <html lang="ca">
 <head>
@@ -11,8 +8,7 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/classes/Tauler.php';
 </head>
 <body>
     <?php
-        $tauler = new Tauler();
-        echo $tauler->generarHTML();
+        echo $tauler->paint();
     ?>
 </body>
 </html>

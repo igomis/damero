@@ -8,23 +8,42 @@ body {
 
 .taula-de-dames {
     display: grid;
-    grid-template-columns: repeat(8, 50px);
-    grid-template-rows: repeat(8, 50px);
+    grid-template-columns: repeat(8, 60px); /* Ajusta la mida de les caselles */
+    grid-template-rows: repeat(8, 60px);
     gap: 2px;
 }
 
-.taula-de-dames div {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .negre {
-    background-color: #444;
+    background-color: #769656; /* Color verd fosc per a les caselles jugables */
 }
 
 .blanc {
-    background-color: #fff;
+    background-color: #eeeed2; /* Color clar per a les caselles no jugables */
+}
+
+.taula-de-dames div.negre, .taula-de-dames div.blanc {
+    width: 60px; /* Ajusta la mida de les caselles */
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Permet posicionament absolut dins */
+}
+
+.taula-de-dames div.negre::before, .taula-de-dames div.blanc::before {
+    content: '';
+    width: 80%; /* Ajusta la mida del marcador de la fitxa */
+    height: 80%; /* Ajusta la mida del marcador de la fitxa */
+    border-radius: 50%;
+    position: absolute;
+}
+
+.taula-de-dames div.negre.fitxa-jugador1::before {
+    background-color: #fff; /* Color de les fitxes del jugador 1 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.taula-de-dames div.negre.fitxa-jugador2::before {
+    background-color: #000; /* Color de les fitxes del jugador 2 */
+    box-shadow: 0 2px 4px rgba(255,255,255,0.3);
 }
