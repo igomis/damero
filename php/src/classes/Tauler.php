@@ -1,5 +1,5 @@
 <?php
-
+namespace Damero;
 class Tauler {
     private $tamany; // Tamany del tauler
     private $caselles = []; // Array per emmagatzemar objectes Casella

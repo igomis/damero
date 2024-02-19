@@ -1,5 +1,5 @@
 <?php
-
+namespace Damero;
 class Casella {
     public $fila;
     public $columna;

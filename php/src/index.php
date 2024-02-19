@@ -1,8 +1,7 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'].'/classes/Casella.php';
-require_once $_SERVER['DOCUMENT_ROOT'].'/classes/Tauler.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/load.php';
 
-$tauler = new Tauler();
+/** @var TYPE_NAME $tauler */
 if ($tauler->moureFitxa(3, 2, 4, 1)) {
     echo "Moviment realitzat amb èxit!";
 } else {

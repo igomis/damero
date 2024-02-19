@@ -4,7 +4,7 @@
     "license" : "MIT",
     "autoload": {
         "psr-4": {
-            "App\\": "src/App"
+            "Damero\\": "src/classes"
         }
     },
     "authors": [
