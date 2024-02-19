@@ -14,14 +14,10 @@ class Tauler {
             for ($columna = 0; $columna < $this->tamany; $columna++) {
                 $colorCasella = ($fila + $columna) % 2 == 0 ? 'blanc' : 'negre';
                 $ocupant = null;
-                if ($colorCasella == 'negre') {
-                    if ($fila < 3) {
-                        $ocupant = 'jugador1';
-                    } elseif ($fila > 4) {
-                        $ocupant = 'jugador2';
-                    }
+                if ($colorCasella == 'negre' && ($fila < 3 || $fila > 4)) {
+                    $ocupant = $fila < 3 ? 'jugador1' : 'jugador2';
                 }
-                $this->caselles[$fila][$columna] = new Casella($colorCasella, $ocupant);
+                $this->caselles[$fila][$columna] = new Casella($fila, $columna, $colorCasella, $ocupant);
             }
         }
     }
@@ -40,8 +36,7 @@ class Tauler {
         foreach ($this->caselles as $filaNum => $fila) {
             echo "<div class='coordenada'>".($filaNum+1)."</div>"; // Coordenades de fila
             foreach ($fila as $casella) {
-                $classeOcupant = $casella->ocupant ? " fitxa-{$casella->ocupant}" : "";
-                echo "<div class='casella {$casella->color}{$classeOcupant}'></div>";
+                echo $casella;
             }
             echo "<div class='coordenada'>".($filaNum+1)."</div>";
         }
