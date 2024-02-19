@@ -3,7 +3,7 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/classes/Casella.php';
 require_once $_SERVER['DOCUMENT_ROOT'].'/classes/Tauler.php';
 
 $tauler = new Tauler();
-if ($tauler->moureFitxa(2, 1, 3, 0)) {
+if ($tauler->moureFitxa(3, 2, 4, 1)) {
     echo "Moviment realitzat amb èxit!";
 } else {
     echo "Moviment invàlid.";

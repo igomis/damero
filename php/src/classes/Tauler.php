@@ -10,12 +10,12 @@ class Tauler {
     }
 
     private function inicialitzarCaselles() {
-        for ($fila = 0; $fila < $this->tamany; $fila++) {
-            for ($columna = 0; $columna < $this->tamany; $columna++) {
+        for ($fila = 1; $fila < $this->tamany+1; $fila++) {
+            for ($columna = 1; $columna < $this->tamany+1; $columna++) {
                 $colorCasella = ($fila + $columna) % 2 == 0 ? 'blanc' : 'negre';
                 $ocupant = null;
-                if ($colorCasella == 'negre' && ($fila < 3 || $fila > 4)) {
-                    $ocupant = $fila < 3 ? 'jugador1' : 'jugador2';
+                if ($colorCasella == 'negre' && ($fila < 4 || $fila > 5)) {
+                    $ocupant = $fila < 4 ? 'jugador2' : 'jugador1';
                 }
                 $this->caselles[$fila][$columna] = new Casella($fila, $columna, $colorCasella, $ocupant);
             }
@@ -29,20 +29,20 @@ class Tauler {
     public function paint() {
         echo '<div class="taula-de-dames">';
         echo '<div class="capcalera-coordenades"></div>'; // Espai buit a l'esquerra superior
-        for ($col = 0; $col < 8; $col++) {
-            echo "<div class='coordenada'>".chr(65+$col)."</div>"; // A, B, C...
+        for ($col = 1; $col < 9; $col++) {
+            echo "<div class='coordenada'>".chr(64+$col)."</div>"; // A, B, C...
         }
         echo '<div class="buit"></div>'; // Final de fila de capçalera
         foreach ($this->caselles as $filaNum => $fila) {
-            echo "<div class='coordenada'>".($filaNum+1)."</div>"; // Coordenades de fila
+            echo "<div class='coordenada'>".($filaNum)."</div>"; // Coordenades de fila
             foreach ($fila as $casella) {
                 echo $casella;
             }
-            echo "<div class='coordenada'>".($filaNum+1)."</div>";
+            echo "<div class='coordenada'>".($filaNum)."</div>";
         }
         echo '<div class="buit"></div>'; // Espai buit a l'inici de la fila inferior
-        for ($col = 0; $col < 8; $col++) {
-            echo "<div class='coordenada'>".chr(65+$col)."</div>"; // A, B, C...
+        for ($col = 1; $col < 9; $col++) {
+            echo "<div class='coordenada'>".chr(64+$col)."</div>"; // A, B, C...
         }
         echo '<div class="capcalera-coordenades"></div>';
         echo '</div>';
@@ -50,8 +50,8 @@ class Tauler {
 
     public function moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna) {
         // Verificar que les coordenades estan dins dels límits del tauler
-        if ($origenFila < 0 || $origenFila >= $this->tamany || $origenColumna < 0 || $origenColumna >= $this->tamany ||
-            $destiFila < 0 || $destiFila >= $this->tamany || $destiColumna < 0 || $destiColumna >= $this->tamany) {
+        if ($origenFila < 1 || $origenFila >= $this->tamany || $origenColumna < 1 || $origenColumna >= $this->tamany ||
+            $destiFila < 1 || $destiFila >= $this->tamany || $destiColumna < 1 || $destiColumna >= $this->tamany) {
             return false; // Coordenades fora dels límits
         }
 
