@@ -57,16 +57,55 @@ class Tauler {
 
         $casellaOrigen = $this->caselles[$origenFila][$origenColumna];
         $casellaDesti = $this->caselles[$destiFila][$destiColumna];
+        $diferenciaFila = abs($destiFila - $origenFila);
+        $diferenciaColumna = abs($destiColumna - $origenColumna);
+
 
         // Verificar que la casella d'origen té una fitxa i la de destinació està buida
-        if ($casellaOrigen->ocupant && !$casellaDesti->ocupant && $casellaDesti->color == 'negre') {
-            // Realitzar el moviment
-            $casellaDesti->ocupant = $casellaOrigen->ocupant;
-            $casellaOrigen->ocupant = null;
-            $_SESSION['tauler'] = serialize($this);
-            return true; // Moviment realitzat amb èxit
+        if (!$casellaOrigen->ocupant || $casellaDesti->ocupant || $casellaDesti->color == 'blanc') {
+            return false;
+        }
+        // Verificar que el moviment es endavant
+        if ($casellaOrigen->ocupant === 'jugador1') {
+            if ($destiFila > $origenFila) {
+                return false;
+            }
+        } else {
+            if ($destiFila < $origenFila) {
+                return false;
+            }
+        }
+        if ($diferenciaFila === 2 && $diferenciaColumna === 2) {
+            // Calcular la posició de la fitxa a ser capturada
+            $filaCaptura = ($origenFila + $destiFila) / 2;
+            $columnaCaptura = ($origenColumna + $destiColumna) / 2;
+            $casellaCaptura = $this->caselles[$filaCaptura][$columnaCaptura];
+
+            // Comprovar si la casella conté una fitxa de l'oponent
+            if ($casellaCaptura->ocupant && $casellaCaptura->ocupant !== $casellaOrigen->ocupant) {
+                // Realitzar la captura
+                $casellaCaptura->ocupant = null;
+            }
         }
 
+        // Comprovar si el moviment és diagonal i endavant
+        /*
+        if ($movimentEndavant && abs($destiFila - $origenFila) === 1 && abs($destiColumna - $origenColumna) === 1) {
+            // Aquí es podria afegir més lògica per comprovar si el moviment és legal (p. ex., captura)
+            // Si tot és correcte, realitzar el moviment
+            $casellaDesti->ocupant = $casellaOrigen->ocupant;
+            $casellaOrigen->ocupant = null;
+            return true;
+        }*/
+
+        $this->mou($casellaOrigen,$casellaDesti);
+
         return false; // Moviment invàlid
+    }
+
+    private function mou($casellaOrigen,$casellaDesti){
+        $casellaDesti->ocupant = $casellaOrigen->ocupant;
+        $casellaOrigen->ocupant = null;
+        $_SESSION['tauler'] = serialize($this);
     }
 }

@@ -11,6 +11,7 @@
 
 </head>
 <body>
+    <a href="reset.php">Nova Partida</a>
     <?php
         echo $tauler->paint();
     ?>
