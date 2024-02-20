@@ -19,7 +19,7 @@
     </div>
     <a href="reset.php">Nova Partida</a>
 
-    <form id="movimentForm" action="processarMoviment.php" method="POST" style="display:none;">
+    <form id="movimentForm" action="index.php" method="POST" style="display:none;">
         <input type="hidden" name="origenFila" id="origenFila">
         <input type="hidden" name="origenColumna" id="origenColumna">
         <input type="hidden" name="destinoFila" id="destinoFila">

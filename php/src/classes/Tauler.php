@@ -51,25 +51,17 @@ class Tauler {
     }
 
     public function moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna, $tornActual) {
-        try {
 
-            $this->coordenadesCorrectes($origenFila, $origenColumna, $destiFila, $destiColumna);
+        $this->coordenadesCorrectes($origenFila, $origenColumna, $destiFila, $destiColumna);
+        $casellaOrigen = $this->caselles[$origenFila][$origenColumna];
+        $this->tornCorrecte($casellaOrigen, $tornActual);
+        $casellaDesti = $this->caselles[$destiFila][$destiColumna];
 
-            $casellaOrigen = $this->caselles[$origenFila][$origenColumna];
-            $this->tornCorrecte($casellaOrigen, $tornActual);
-            $casellaDesti = $this->caselles[$destiFila][$destiColumna];
+        // Verificar que la casella d'origen té una fitxa i la de destinació està buida
+        $this->movimentCorrecte($casellaOrigen, $casellaDesti);
+        $this->capturaCorrecta($casellaOrigen, $casellaDesti);
 
-
-
-            // Verificar que la casella d'origen té una fitxa i la de destinació està buida
-            $this->movimentCorrecte($casellaOrigen, $casellaDesti);
-            $this->capturaCorrecta($casellaOrigen, $casellaDesti);
-
-            $this->mou($casellaOrigen, $casellaDesti);
-        } catch (\Exception $e){
-            $_SESSION['error'] = $e->getMessage();
-            header('location:index.php');
-        }
+        $this->mou($casellaOrigen, $casellaDesti);
 
         return true; // El moviment ha estat realitzat
     }

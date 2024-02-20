@@ -34,7 +34,6 @@ class Partida {
         if ($this->tauler->moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna, $this->tornActual)) {
             // Moviment vàlid, potser comprova si hi ha un guanyador o si s'ha acabat el joc
             $this->comprovarEstatJoc();
-
             // Canvia el torn
             $this->canviarTorn();
             $_SESSION['partida'] = serialize($this);
@@ -42,6 +41,10 @@ class Partida {
             // Maneig d'error: Moviment invàlid
             echo "Moviment invàlid. Si us plau, prova un altre cop.";
         }
+    }
+
+    public function finalitzada() {
+        return $this->estatJoc === "acabat";
     }
 
     private function comprovarEstatJoc() {
