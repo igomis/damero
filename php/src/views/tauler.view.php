@@ -1,5 +1,5 @@
 <?php
-    $file = $_SERVER['DOCUMENT_ROOT'].'/javacript/moviment.js';
+    /** @var \Damero\Tauler $tauler */
 ?>
 <!DOCTYPE html>
 <html lang="ca">
@@ -11,10 +11,13 @@
 
 </head>
 <body>
+    <div id="missatgeError" style="display: none; color: red; text-align: center; margin-bottom: 10px;">
+        <?= isset($error)?$error:'' ?>
+    </div>
+
+    <?= $tauler ?>
     <a href="reset.php">Nova Partida</a>
-    <?php
-        echo $tauler->paint();
-    ?>
+
     <form id="movimentForm" action="processarMoviment.php" method="POST" style="display:none;">
         <input type="hidden" name="origenFila" id="origenFila">
         <input type="hidden" name="origenColumna" id="origenColumna">
