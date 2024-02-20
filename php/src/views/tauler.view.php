@@ -1,5 +1,5 @@
 <?php
-    /** @var \Damero\Tauler $tauler */
+    /** @var \Damero\Partida $partida */
 ?>
 <!DOCTYPE html>
 <html lang="ca">
@@ -15,7 +15,7 @@
         <?= isset($error)?$error:'' ?>
     </div>
     <div class="taula-de-dames">
-        <?= $tauler ?>
+        <?= $partida->getTauler() ?>
     </div>
     <a href="reset.php">Nova Partida</a>
 

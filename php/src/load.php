@@ -1,13 +1,13 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'].'/../vendor/autoload.php';
 
-use Damero\Tauler;
+use Damero\Partida;
 
 session_start();
-if (isset($_SESSION['tauler'])){
-    $tauler = unserialize($_SESSION['tauler']);
+if (isset($_SESSION['partida'])){
+    $partida = unserialize($_SESSION['partida']);
 } else {
-    $tauler = new Tauler();
-    $_SESSION['tauler'] = serialize($tauler);
+    $partida = new Partida();
+    $_SESSION['partida'] = serialize($partida);
 }
 

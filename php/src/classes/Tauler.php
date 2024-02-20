@@ -50,13 +50,15 @@ class Tauler {
         return $string;
     }
 
-    public function moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna) {
+    public function moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna, $tornActual) {
         try {
 
             $this->coordenadesCorrectes($origenFila, $origenColumna, $destiFila, $destiColumna);
 
             $casellaOrigen = $this->caselles[$origenFila][$origenColumna];
+            $this->tornCorrecte($casellaOrigen, $tornActual);
             $casellaDesti = $this->caselles[$destiFila][$destiColumna];
+
 
 
             // Verificar que la casella d'origen té una fitxa i la de destinació està buida
@@ -69,7 +71,7 @@ class Tauler {
             header('location:index.php');
         }
 
-        return false; // Moviment invàlid
+        return true; // El moviment ha estat realitzat
     }
 
     private function mou($casellaOrigen,$casellaDesti){
@@ -109,39 +111,6 @@ class Tauler {
         }
     }
 
-    /**
-     * @param $diferenciaFila
-     * @param $diferenciaColumna
-     * @param $origenFila
-     * @param $destiFila
-     * @param $origenColumna
-     * @param $destiColumna
-     * @param $casellaOrigen
-     * @return void
-
-    private function capturaCorrecta(
-        $origenFila,
-        $destiFila,
-        $origenColumna,
-        $destiColumna
-    ): void {
-        $diferenciaFila = abs($destiFila - $origenFila);
-        $diferenciaColumna = abs($destiColumna - $origenColumna);
-        if ($diferenciaFila === 2 && $diferenciaColumna === 2) {
-            // Calcular la posició de la fitxa a ser capturada
-            $filaCaptura = ($origenFila + $destiFila) / 2;
-            $columnaCaptura = ($origenColumna + $destiColumna) / 2;
-            $casellaOrigen = $this->caselles[$origenFila][$columnaCaptura];
-            $casellaCaptura = $this->caselles[$filaCaptura][$columnaCaptura];
-
-            // Comprovar si la casella conté una fitxa de l'oponent
-            if ($casellaCaptura->ocupant && $casellaCaptura->ocupant !== $casellaOrigen->ocupant) {
-                // Realitzar la captura
-                $casellaCaptura->ocupant = null;
-            }
-        }
-    }
-     */
 
     private function capturaCorrecta(
         $casellaOrigen,
@@ -160,6 +129,19 @@ class Tauler {
                 // Realitzar la captura
                 $casellaCaptura->ocupant = null;
             }
+        }
+    }
+
+    /**
+     * @param $casellaOrigen
+     * @param $tornActual
+     * @return void
+     * @throws \Exception
+     */
+    private function tornCorrecte($casellaOrigen, $tornActual): void
+    {
+        if ($casellaOrigen->ocupant !== $tornActual) {
+            throw new \Exception('No pots moure la fitxa de l\'oponent');
         }
     }
 }
