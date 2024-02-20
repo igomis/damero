@@ -49,7 +49,7 @@ body {
     box-shadow: 0 2px 4px rgba(255,255,255,0.3);
 }
 
-.capcalera-coordenades, .buit {
+.buit {
     width: 60px;
     height: 30px; /* Ajusta segons necessitat */
 }
@@ -61,4 +61,12 @@ body {
     height: 30px; /* Ajusta segons necessitat */
     font-family: Arial, sans-serif;
     font-size: 14px;
+}
+#missatgeError {
+    color: red;
+    text-align: center;
+    margin-bottom: 10px;
+    background-color: #fff3f3;
+    border: 1px solid red;
+    padding: 5px;
 }

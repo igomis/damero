@@ -11,11 +11,12 @@
 
 </head>
 <body>
-    <div id="missatgeError" style="display: none; color: red; text-align: center; margin-bottom: 10px;">
+    <div id="missatgeError" style=" color: red; text-align: center; margin-bottom: 10px;">
         <?= isset($error)?$error:'' ?>
     </div>
-
-    <?= $tauler ?>
+    <div class="taula-de-dames">
+        <?= $tauler ?>
+    </div>
     <a href="reset.php">Nova Partida</a>
 
     <form id="movimentForm" action="processarMoviment.php" method="POST" style="display:none;">

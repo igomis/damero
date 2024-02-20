@@ -29,11 +29,7 @@ class Tauler {
     }
 
     public function __toString() {
-        $string ='<div class="taula-de-dames"><div class="capcalera-coordenades"></div>'; // Espai buit a l'esquerra superior
-        for ($col = 1; $col < 9; $col++) {
-            $string.= "<div class='coordenada'>".chr(64+$col)."</div>"; // A, B, C...
-        }
-        $string.= '<div class="buit"></div>'; // Final de fila de capçalera
+        $string = $this->capCoord();
         foreach ($this->caselles as $filaNum => $fila) {
             $string.= "<div class='coordenada'>".($filaNum)."</div>"; // Coordenades de fila
             foreach ($fila as $casella) {
@@ -41,12 +37,16 @@ class Tauler {
             }
             $string.= "<div class='coordenada'>".($filaNum)."</div>";
         }
-        $string .='<div class="buit"></div>'; // Espai buit a l'inici de la fila inferior
+        $string .= $this->capCoord();
+        return $string;
+    }
+
+    private function capCoord(){
+        $string ='<div class="buit"></div>'; // Espai buit a l'esquerra superior
         for ($col = 1; $col < 9; $col++) {
             $string.= "<div class='coordenada'>".chr(64+$col)."</div>"; // A, B, C...
         }
-        $string.= '<div class="capcalera-coordenades"></div>';
-        $string.= '</div>';
+        $string.= '<div class="buit"></div>'; // Final de fila de capçalera
         return $string;
     }
 
