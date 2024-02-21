@@ -88,16 +88,19 @@ class Tauler {
      */
     private function movimentCorrecte($casellaOrigen, $casellaDesti): void
     {
+        if (!$casellaOrigen || !$casellaDesti){
+            throw new \Exception('Casella fora tauler');
+        }
         if (! $casellaOrigen->ocupant || $casellaDesti->ocupant || $casellaDesti->color == 'blanc') {
             throw new \Exception('Error en les caselles');
         }
         // Verificar que el moviment es endavant
         if ($casellaOrigen->ocupant === 'jugador1') {
-            if ($casellaDesti->fila > $casellaOrigen->fila) {
+            if ($casellaDesti->fila >= $casellaOrigen->fila) {
                 throw new \Exception('Moviment endarrere');
             }
         } else {
-            if ($casellaDesti->fila < $casellaOrigen->fila) {
+            if ($casellaDesti->fila <= $casellaOrigen->fila) {
                 throw new \Exception('Moviment endarrere');
             }
         }
@@ -106,22 +109,32 @@ class Tauler {
 
     private function capturaCorrecta(
         $casellaOrigen,
-        $casellaDesti
-    ): void {
-        $diferenciaFila = abs($casellaDesti->fila - $casellaOrigen->fila);
-        $diferenciaColumna = abs($casellaDesti->columna - $casellaOrigen->columna);
-        if ($diferenciaFila === 2 && $diferenciaColumna === 2) {
-            // Calcular la posició de la fitxa a ser capturada
-            $filaCaptura = ($casellaOrigen->fila + $casellaDesti->fila) / 2;
-            $columnaCaptura = ($casellaOrigen->columna + $casellaDesti->columna) / 2;
-            $casellaCaptura = $this->caselles[$filaCaptura][$columnaCaptura];
+        $casellaDesti,
+        $captura = true
+    ): bool {
+        if ($casellaOrigen && $casellaDesti) {
+            $diferenciaFila = abs($casellaDesti->fila - $casellaOrigen->fila);
+            $diferenciaColumna = abs($casellaDesti->columna - $casellaOrigen->columna);
+            if ($diferenciaFila === 2 && $diferenciaColumna === 2) {
+                // Calcular la posició de la fitxa a ser capturada
+                $filaCaptura = ($casellaOrigen->fila + $casellaDesti->fila) / 2;
+                $columnaCaptura = ($casellaOrigen->columna + $casellaDesti->columna) / 2;
+                $casellaCaptura = $this->caselles[$filaCaptura][$columnaCaptura];
 
-            // Comprovar si la casella conté una fitxa de l'oponent
-            if ($casellaCaptura->ocupant && $casellaCaptura->ocupant !== $casellaOrigen->ocupant) {
-                // Realitzar la captura
-                $casellaCaptura->ocupant = null;
+                // Comprovar si la casella conté una fitxa de l'oponent
+                if ($casellaCaptura->ocupant && $casellaCaptura->ocupant !== $casellaOrigen->ocupant) {
+                    // Realitzar la captura
+                    if ($captura) {
+                        $casellaCaptura->ocupant = null;
+                    } else {
+                        var_dump($casellaCaptura,$casellaCaptura->ocupant);
+                        return true;
+                    }
+                }
             }
         }
+        return false;
+
     }
 
     /**
@@ -134,6 +147,78 @@ class Tauler {
     {
         if ($casellaOrigen->ocupant !== $tornActual) {
             throw new \Exception('No pots moure la fitxa de l\'oponent');
+        }
+    }
+
+    public function comptarFitxes(string $string)
+    {
+        $fitxes = 0;
+
+        foreach ($this->caselles as $files) {
+            foreach ($files as $casella){
+                if ($casella->getOcupant() === $string) {
+                    $fitxes++;
+                }
+            }
+        }
+        return $fitxes;
+    }
+
+    public function potMoure($jugador) {
+        for ($fila = 1; $fila <= $this->tamany; $fila++) {
+            for ($columna = 1; $columna <= $this->tamany; $columna++) {
+                $casellaActual = $this->caselles[$fila][$columna];
+                if ($casellaActual->ocupant === $jugador) {
+                    if ($this->comprovarMovimentsFitxa($casellaActual, $jugador)) {
+                        return true; // Hi ha almenys un moviment vàlid.
+                    }
+                }
+            }
+        }
+        return false; // No s'ha trobat cap moviment vàlid.
+    }
+
+    private function comprovarMovimentsFitxa($casella, $jugador) {
+        $direccions = $jugador === 'jugador1' ? [[1, -1], [1, 1]] : [[-1, -1], [-1, 1]]; // Direccions de moviment per a cada jugador
+
+        foreach ($direccions as $direccio) {
+            $destiFila = $casella->fila + $direccio[0];
+            $destiColumna = $casella->columna + $direccio[1];
+            $desti = $this->caselles[$destiFila][$destiColumna]??null;
+
+            // Comprovar moviment simple
+            if ($this->esMovimentValid($casella, $desti)) {
+
+                return true;
+            }
+
+            // Comprovar captura
+            $destiFilaCaptura = $casella->fila + 2 * $direccio[0];
+            $destiColumnaCaptura = $casella->columna + 2 * $direccio[1];
+            $desti = $this->caselles[$destiFilaCaptura][$destiColumnaCaptura]??null;
+            if ($this->esCapturaValida($casella, $desti)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function esMovimentValid($origen,$desti) {
+        try {
+            $this->movimentCorrecte($origen,$desti);
+            return true;
+        } catch (\Exception $e){
+            return false;
+        }
+
+    }
+
+    private function esCapturaValida($origen,$desti) {
+        try {
+            return $this->capturaCorrecta($origen,$desti,false);
+        } catch (\Exception $e){
+            return false;
         }
     }
 }

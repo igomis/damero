@@ -16,6 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = $e->getMessage();
     }
 }
+if ($partida->finalitzada()) {
+    echo 'Partida finalitzada';
+}
 include_once './views/tauler.view.php';
 
 

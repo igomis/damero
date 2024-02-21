@@ -3,7 +3,15 @@ namespace Damero;
 class Casella {
     public $fila;
     public $columna;
-    public $color; // 'blanc' o 'negre'
+    public $color;
+
+    /**
+     * @return mixed|null
+     */
+    public function getOcupant()
+    {
+        return $this->ocupant;
+    } // 'blanc' o 'negre'
     public $ocupant; // Null si està buida, o 'jugador1', 'jugador2'
 
     public function __construct($fila, $columna, $color, $ocupant = null) {
