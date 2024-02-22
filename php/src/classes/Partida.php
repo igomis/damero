@@ -1,6 +1,8 @@
 <?php
 
 namespace Damero;
+use Damero\Exempcions\MovementException;
+
 class Partida {
     private $tauler;
     private $tornActual;
@@ -19,9 +21,19 @@ class Partida {
         return $this->tauler;
     }
 
+    public function getEstatJoc(): string
+    {
+        return $this->estatJoc;
+    }
+
     public function getTorn(): string
     {
         return $this->tornActual;
+    }
+
+    public function getTornActual(): string
+    {
+        return $this->tornActual == 'jugador1'?'juguen blanques':'juguen negres';
     }
 
 
@@ -32,15 +44,13 @@ class Partida {
     public function moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna) {
         $this->comprovarEstatJoc();
         // Comprova si el moviment és vàlid, realitza el moviment, i actualitza l'estat del joc si cal
-        if ($this->tauler->moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna, $this->tornActual)) {
-            // Moviment vàlid, potser comprova si hi ha un guanyador o si s'ha acabat el joc
-
-            // Canvia el torn
+        try {
+            $this->tauler->moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna, $this->tornActual);
             $this->canviarTorn();
             $_SESSION['partida'] = serialize($this);
-        } else {
-            // Maneig d'error: Moviment invàlid
-            echo "Moviment invàlid. Si us plau, prova un altre cop.";
+            return 'Moviment realitzat correctament';
+        }catch (MovementException $e) {
+            return 'Moviment invàlid. Si us plau, prova un altre cop: '.$e->getMessage();
         }
     }
 

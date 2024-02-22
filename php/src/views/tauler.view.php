@@ -11,9 +11,14 @@
 
 </head>
 <body>
+    <div style="color: gray;"><?= $partida->getTornActual().' - '.$partida->getTorn()  ?></div>
     <div id="missatgeError" style=" color: red; text-align: center; margin-bottom: 10px;">
-        <?= isset($error)?$error:'' ?>
+        <?= isset($missatge)?$missatge:'' ?>
     </div>
+    <div id="missatgePartida" style=" color: blue; text-align: center; margin-bottom: 10px;">
+        <?= $partida->getEstatJoc() ?>
+    </div>
+
     <div class="taula-de-dames">
         <?= $partida->getTauler() ?>
     </div>

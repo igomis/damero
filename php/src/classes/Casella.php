@@ -33,4 +33,9 @@ class Casella {
         $string .= "</div>";
         return $string;
     }
+
+    public function getColumna()
+    {
+        return chr(64+$this->columna);
+    }
 }
