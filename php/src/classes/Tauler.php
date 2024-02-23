@@ -54,7 +54,7 @@ class Tauler {
         return $string;
     }
 
-    public function moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna, $tornActual) {
+    public function moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna, $tornActual,$obligat =false) {
 
         $this->coordenadesCorrectes($origenFila, $origenColumna, $destiFila, $destiColumna);
         $casellaOrigen = $this->caselles[$origenFila][$origenColumna];
@@ -63,9 +63,17 @@ class Tauler {
 
         // Verificar que la casella d'origen té una fitxa i la de destinació està buida
         if (!$this->capturaCorrecta($casellaOrigen, $casellaDesti)){
-            $this->movimentCorrecte($casellaOrigen, $casellaDesti);
+            if (!$obligat) {
+                $this->movimentCorrecte($casellaOrigen, $casellaDesti);
+                $this->mou($casellaOrigen, $casellaDesti);
+                return null;
+            } else {
+                throw new MovementException('Has de capturar');
+            }
+        } else {
+            $this->mou($casellaOrigen, $casellaDesti);
+            return $casellaDesti;
         }
-        $this->mou($casellaOrigen, $casellaDesti);
     }
     /**
      * @param $casellaOrigen
@@ -176,22 +184,52 @@ class Tauler {
     }
 
     public function potMoure($jugador) {
+        $teCaptures = false;
+
+        for ($fila = 1; $fila <= $this->tamany; $fila++) {
+            for ($columna = 1; $columna <= $this->tamany; $columna++) {
+                $casellaActual = $this->caselles[$fila][$columna];
+                if ($casellaActual->ocupant === $jugador) {
+                    // Primer, comprova si hi ha captures disponibles per aquesta fitxa
+                    if ($this->teCapturesDisponibles($casellaActual)) {
+                        $teCaptures = true;
+                    }
+                }
+            }
+        }
+        if ($teCaptures) {
+            // Si hi ha captures disponibles, el jugador ha de capturar
+            return 1;
+        }
         for ($fila = 1; $fila <= $this->tamany; $fila++) {
             for ($columna = 1; $columna <= $this->tamany; $columna++) {
                 $casellaActual = $this->caselles[$fila][$columna];
                 if ($casellaActual->ocupant === $jugador) {
                     if ($this->comprovarMovimentsFitxa($casellaActual)) {
-                        return true; // Hi ha almenys un moviment vàlid.
+                        return 2; // Hi ha almenys un moviment vàlid.
                     }
                 }
             }
         }
-        return false; // No s'ha trobat cap moviment vàlid.
+        return 0; // No s'ha trobat cap moviment vàlid.
+    }
+
+    public function teCapturesDisponibles($casella) {
+        $direccions = $this->obtenirMovimentsPosibles($casella->ocupant);
+        foreach ($direccions as $direccio) {
+            $destiFilaCaptura = $casella->fila + 2 * $direccio[0];
+            $destiColumnaCaptura = $casella->columna + 2 * $direccio[1];
+            $desti = $this->caselles[$destiFilaCaptura][$destiColumnaCaptura]??null;
+            if ( $this->capturaCorrecta($casella,$desti,false)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private function comprovarMovimentsFitxa($casella) {
-        $jugador = $casella->ocupant;
-        $direccions = $jugador === 'jugador2' ? [[1, -1], [1, 1]] : [[-1, -1], [-1, 1]]; // Direccions de moviment per a cada jugador
+        $direccions = $this->obtenirMovimentsPosibles($casella->ocupant);
+
 
         foreach ($direccions as $direccio) {
             $destiFila = $casella->fila + $direccio[0];
@@ -204,16 +242,15 @@ class Tauler {
                 } catch (MovementException $e) {
                 }
             }
-
-            // Comprovar captura
-            $destiFilaCaptura = $casella->fila + 2 * $direccio[0];
-            $destiColumnaCaptura = $casella->columna + 2 * $direccio[1];
-            $desti = $this->caselles[$destiFilaCaptura][$destiColumnaCaptura]??null;
-            if ( $this->capturaCorrecta($casella,$desti,false)) {
-                return true;
-            }
         }
 
         return false;
+    }
+
+
+    private function obtenirMovimentsPosibles($jugador) {
+        // Retorna les direccions de captura basades en el jugador
+        // Això pot variar si estàs implementant dames que poden moure's/capturar en qualsevol direcció
+        return $jugador === 'jugador2' ? [[1, -1], [1, 1]] : [[-1, -1], [-1, 1]];
     }
 }

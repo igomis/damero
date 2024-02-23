@@ -11,7 +11,7 @@
 
 </head>
 <body>
-    <div style="color: gray;"><?= $partida->getTornActual().' - '.$partida->getTorn()  ?></div>
+    <div style="color: gray;"><?= $partida->getTornActual() ?></div>
     <div id="missatgeError" style=" color: red; text-align: center; margin-bottom: 10px;">
         <?= isset($missatge)?$missatge:'' ?>
     </div>

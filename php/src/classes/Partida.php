@@ -42,16 +42,23 @@ class Partida {
     }
 
     public function moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna) {
-        $this->comprovarEstatJoc();
-        // Comprova si el moviment és vàlid, realitza el moviment, i actualitza l'estat del joc si cal
-        try {
-            $this->tauler->moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna, $this->tornActual);
-            $this->canviarTorn();
-            $_SESSION['partida'] = serialize($this);
-            return 'Moviment realitzat correctament';
-        }catch (MovementException $e) {
-            return 'Moviment invàlid. Si us plau, prova un altre cop: '.$e->getMessage();
+        $obligat = $this->comprovarEstatJoc();
+        if ($this->finalitzada()) {
+            return 'La partida ha acabat. No es poden fer més moviments.';
+        } else {
+            try {
+                $captura = $this->tauler->moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna, $this->tornActual,$obligat);
+                if (!$captura || !$this->tauler->teCapturesDisponibles($captura) ) {
+                    $this->canviarTorn();
+                }
+                $_SESSION['partida'] = serialize($this);
+                return 'Moviment realitzat correctament';
+            }catch (MovementException $e) {
+                return 'Moviment invàlid. Si us plau, prova un altre cop: '.$e->getMessage();
+            }
         }
+        // Comprova si el moviment és vàlid, realitza el moviment, i actualitza l'estat del joc si cal
+
     }
 
     public function finalitzada() {
@@ -66,7 +73,7 @@ class Partida {
         if ($fitxesJugador1 == 0 || $fitxesJugador2 == 0) {
             $this->estatJoc = "acabat";
             $this->guanyador = $fitxesJugador1 > 0 ? "jugador1" : "jugador2";
-            return;
+            return false;
         }
 
         // Comprova si el jugador actual no té moviments vàlids
@@ -76,11 +83,15 @@ class Partida {
             $this->estatJoc = "acabat";
             // El guanyador és l'altre jugador
             $this->guanyador = $this->tornActual === "jugador1" ? "jugador2" : "jugador1";
-            return;
+            return 0;
         }
 
         // Si arribem aquí, el joc continua
         $this->estatJoc = "en curs";
+        if ($potMoure === 1) {
+            return true;
+        }
+        return false;
     }
 
 
