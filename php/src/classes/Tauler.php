@@ -54,11 +54,11 @@ class Tauler {
         return $string;
     }
 
-    public function moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna, $tornActual,$obligat =false) {
+    public function moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna, $tornActual,$obligat =false,$doblecaptura = null) {
 
         $this->coordenadesCorrectes($origenFila, $origenColumna, $destiFila, $destiColumna);
         $casellaOrigen = $this->caselles[$origenFila][$origenColumna];
-        $this->tornCorrecte($casellaOrigen, $tornActual);
+        $this->tornCorrecte($casellaOrigen, $tornActual,$doblecaptura);
         $casellaDesti = $this->caselles[$destiFila][$destiColumna];
 
         // Verificar que la casella d'origen té una fitxa i la de destinació està buida
@@ -81,16 +81,22 @@ class Tauler {
      * @return void
      * @throws \Exception
      */
-    private function tornCorrecte($casellaOrigen, $tornActual): void
+    private function tornCorrecte($casellaOrigen, $tornActual,$doblecaptura): void
     {
         if ($casellaOrigen->ocupant !== $tornActual) {
             throw new MovementException('No pots moure la fitxa de l\'oponent');
+        }
+        if ($doblecaptura && $doblecaptura !== $casellaOrigen) {
+            throw new MovementException('Has de continuar capturant');
         }
     }
 
     private function mou($casellaOrigen,$casellaDesti){
         $casellaDesti->ocupant = $casellaOrigen->ocupant;
         $casellaOrigen->ocupant = null;
+        if ($this->esCoronacio($casellaDesti)) {
+            $casellaDesti->tipus = 'dama';
+        }
         $_SESSION['tauler'] = serialize($this);
     }
 
@@ -252,5 +258,18 @@ class Tauler {
         // Retorna les direccions de captura basades en el jugador
         // Això pot variar si estàs implementant dames que poden moure's/capturar en qualsevol direcció
         return $jugador === 'jugador2' ? [[1, -1], [1, 1]] : [[-1, -1], [-1, 1]];
+    }
+
+    private function esCoronacio($casella) {
+        // Comprova si la fitxa ha arribat a l'extrem oposat del tauler
+        var_dump($casella->fila,$casella->ocupant);
+        if ($casella->ocupant === 'jugador1' && $casella->fila === 1) {
+            // Jugador 1 coronant a l'extrem inferior
+            return true;
+        } elseif ($casella->ocupant === 'jugador2' && $casella->fila === $this->tamany) {
+            // Jugador 2 coronant a l'extrem superior
+            return true;
+        }
+        return false;
     }
 }

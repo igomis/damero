@@ -40,14 +40,78 @@ body {
 }
 
 .taula-de-dames div.fitxa.fitxa-jugador1::before {
+    content: ''; /* Asegura't que el pseudoelement es mostra */
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
     background-color: #fff; /* Color de les fitxes del jugador 1 */
     box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 .taula-de-dames div.fitxa.fitxa-jugador2::before {
+    content: ''; /* Asegura't que el pseudoelement es mostra */
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
     background-color: #000; /* Color de les fitxes del jugador 2 */
     box-shadow: 0 2px 4px rgba(255,255,255,0.3);
 }
+
+.taula-de-dames div.fitxa.dama-jugador1::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #DDD; /* Color de la fitxa */
+    position: absolute;
+    z-index: 1;
+    box-shadow: 0 0 2px rgba(0,0,0,0.6); /* Ombra exterior més gran */
+}
+
+.taula-de-dames div.fitxa.dama-jugador1::after {
+    content: '';
+    display: block;
+    width: 60%; /* Ajusta segons la mida desitjada per al cercle interior */
+    height: 60%; /* Ajusta segons la mida desitjada per al cercle interior */
+    border-radius: 50%;
+    background-color: #fff; /* Color del cercle interior */
+    position: absolute;
+    z-index: 2;
+    top: 25%; /* Posicionament per centrar el cercle interior */
+    left: 25%;
+}
+
+.taula-de-dames div.fitxa.dama-jugador2::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #222; /* Color de la fitxa */
+    position: absolute;
+    z-index: 1;
+    box-shadow: 0 0 2px rgba(0,0,0,0.6); /* Ombra exterior més gran */
+}
+
+.taula-de-dames div.fitxa.dama-jugador2::after {
+    content: '';
+    display: block;
+    width: 60%; /* Ajusta segons la mida desitjada per al cercle interior */
+    height: 60%; /* Ajusta segons la mida desitjada per al cercle interior */
+    border-radius: 50%;
+    background-color: #000; /* Color del cercle interior */
+    position: absolute;
+    z-index: 2;
+    top: 25%; /* Posicionament per centrar el cercle interior */
+    left: 25%;
+}
+
+
+
+
 
 .buit {
     width: 60px;

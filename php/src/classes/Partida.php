@@ -8,6 +8,8 @@ class Partida {
     private $tornActual;
     private $estatJoc; // Podria ser "en curs", "acabat", etc.
     private $guanyador; // "jugador1", "jugador2", o null si encara no hi ha guanyador
+    private $obligat = false;
+    private $dobleCaptura = null;
 
     public function __construct() {
         $this->tauler = new Tauler(); // Suposem que tens una classe Tauler
@@ -42,14 +44,24 @@ class Partida {
     }
 
     public function moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna) {
-        $obligat = $this->comprovarEstatJoc();
+        $this->obligat = $this->comprovarEstatJoc();
         if ($this->finalitzada()) {
             return 'La partida ha acabat. No es poden fer més moviments.';
         } else {
             try {
-                $captura = $this->tauler->moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna, $this->tornActual,$obligat);
+                $captura = $this->tauler->moureFitxa(
+                    $origenFila,
+                    $origenColumna,
+                    $destiFila,
+                    $destiColumna,
+                    $this->tornActual,
+                    $this->obligat,
+                    $this->dobleCaptura);
                 if (!$captura || !$this->tauler->teCapturesDisponibles($captura) ) {
                     $this->canviarTorn();
+                    $this->dobleCaptura = null;
+                } else {
+                    $this->dobleCaptura = $captura;
                 }
                 $_SESSION['partida'] = serialize($this);
                 return 'Moviment realitzat correctament';
@@ -88,7 +100,7 @@ class Partida {
 
         // Si arribem aquí, el joc continua
         $this->estatJoc = "en curs";
-        if ($potMoure === 1) {
+        if ($potMoure === 1) { // va obligat a capturar
             return true;
         }
         return false;
