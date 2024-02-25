@@ -10,4 +10,5 @@ if (isset($_SESSION['partida'])){
     $partida = new Partida();
     $_SESSION['partida'] = serialize($partida);
 }
+$userId = isset($_SESSION['userId']) ? $_SESSION['userId'] : null;
 

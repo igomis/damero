@@ -10,6 +10,7 @@ class Partida {
     private $guanyador; // "jugador1", "jugador2", o null si encara no hi ha guanyador
     private $obligat = false;
     private $dobleCaptura = null;
+    private $moviments = [];
 
     public function __construct() {
         $this->tauler = new Tauler(); // Suposem que tens una classe Tauler
@@ -44,7 +45,6 @@ class Partida {
     }
 
     public function moureFitxa($origenFila, $origenColumna, $destiFila, $destiColumna) {
-        $this->obligat = $this->comprovarEstatJoc();
         if ($this->finalitzada()) {
             return 'La partida ha acabat. No es poden fer més moviments.';
         } else {
@@ -64,6 +64,13 @@ class Partida {
                     $this->dobleCaptura = $captura;
                 }
                 $_SESSION['partida'] = serialize($this);
+                $this->moviments[] = [
+                    'origenFila' => $origenFila,
+                    'origenColumna' => chr(64+$origenColumna),
+                    'destiFila' => $destiFila,
+                    'destiColumna' => chr(64+$destiColumna),
+                ];
+                $this->obligat = $this->comprovarEstatJoc();
                 return 'Moviment realitzat correctament';
             }catch (MovementException $e) {
                 return 'Moviment invàlid. Si us plau, prova un altre cop: '.$e->getMessage();

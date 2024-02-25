@@ -7,6 +7,34 @@ body {
     background-color: #f0f0f0;
 }
 
+header {
+    background-color: #f8f9fa; /* Un fons clar, per exemple, gris clar */
+    padding: 10px 20px; /* Afegeix algun espaiament al voltant del contingut */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Ombra suau per a un efecte elevat */
+    display: flex; /* Utilitza flexbox per alinear els elements */
+    justify-content: space-between; /* Espaia els elements uniformement */
+    align-items: center; /* Centra els elements verticalment */
+    margin-bottom: 20px; /* Espaiament sota la capçalera */
+}
+
+header p {
+    margin: 0; /* Elimina els marges per defecte dels paràgrafs */
+    font-size: 16px; /* Ajusta la mida de lletra segons necessitat */
+    color: #333; /* Color de text fosc per a contrast */
+}
+
+header a {
+    text-decoration: none; /* Elimina el subratllat dels enllaços */
+    color: #007bff; /* Un color blau per als enllaços, ajusta segons el teu esquema de colors */
+    margin-left: 15px; /* Espaiament entre enllaços si n'hi ha més d'un */
+    font-size: 16px; /* Ajusta la mida de lletra segons necessitat */
+}
+
+header a:hover {
+    text-decoration: underline; /* Afegeix un subratllat en passar el ratolí per sobre per millorar l'accessibilitat */
+}
+
+
 .container {
     display: flex;
     flex-direction: column;

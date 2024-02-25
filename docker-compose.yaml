@@ -32,8 +32,8 @@ services:
       - "3306:3306"
     command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_DATABASE: pruebadb
-      MYSQL_USER: usuario
+      MYSQL_DATABASE: damero
+      MYSQL_USER: root
       MYSQL_PASSWORD: 1234
       MYSQL_ROOT_PASSWORD: 1234
     volumes:
