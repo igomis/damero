@@ -2,8 +2,19 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column; /* Disposa els elements verticalment */
     height: 100vh;
     background-color: #f0f0f0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.informacio-joc {
+    margin-bottom: 20px; /* Espai entre la informació del joc i el tauler */
 }
 
 .taula-de-dames {
@@ -13,6 +24,10 @@ body {
     justify-content: center;
     gap: 2px;
 }
+
+
+
+/* Resta d'estils per a .negre, .blanc, etc. */
 
 .negre {
     background-color: #769656; /* Color verd fosc per a les caselles jugables */
@@ -65,7 +80,7 @@ body {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background-color: #DDD; /* Color de la fitxa */
+    background-color: #AAA; /* Color de la fitxa */
     position: absolute;
     z-index: 1;
     box-shadow: 0 0 2px rgba(0,0,0,0.6); /* Ombra exterior més gran */
@@ -90,7 +105,7 @@ body {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background-color: #222; /* Color de la fitxa */
+    background-color: #666; /* Color de la fitxa */
     position: absolute;
     z-index: 1;
     box-shadow: 0 0 2px rgba(0,0,0,0.6); /* Ombra exterior més gran */
@@ -108,10 +123,6 @@ body {
     top: 25%; /* Posicionament per centrar el cercle interior */
     left: 25%;
 }
-
-
-
-
 
 .buit {
     width: 60px;
@@ -134,3 +145,22 @@ body {
     border: 1px solid red;
     padding: 5px;
 }
+
+.fitxa {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: block;
+}
+.fitxa-jugador1, .fitxa-jugador2 {
+    box-shadow: 0 0 8px rgba(0,0,0,0.6); /* Exemple d'ombra per veure l'efecte */
+}
+
+.fitxa-jugador1 {
+    background-color: #fff; /* Color blanc per al jugador 1 */
+}
+
+.fitxa-jugador2 {
+    background-color: #000; /* Color negre per al jugador 2 */
+}
+
