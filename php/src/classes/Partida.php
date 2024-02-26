@@ -63,14 +63,9 @@ class Partida {
                 } else {
                     $this->dobleCaptura = $captura;
                 }
-                $_SESSION['partida'] = serialize($this);
-                $this->moviments[] = [
-                    'origenFila' => $origenFila,
-                    'origenColumna' => chr(64+$origenColumna),
-                    'destiFila' => $destiFila,
-                    'destiColumna' => chr(64+$destiColumna),
-                ];
                 $this->obligat = $this->comprovarEstatJoc();
+                $this->afegirMoviment($origenFila, $origenColumna, $destiFila, $destiColumna);
+                $_SESSION['partida'] = serialize($this);
                 return 'Moviment realitzat correctament';
             }catch (MovementException $e) {
                 return 'Moviment invàlid. Si us plau, prova un altre cop: '.$e->getMessage();
@@ -78,6 +73,15 @@ class Partida {
         }
         // Comprova si el moviment és vàlid, realitza el moviment, i actualitza l'estat del joc si cal
 
+    }
+
+    private function afegirMoviment($origenFila, $origenColumna, $destiFila, $destiColumna) {
+        $this->moviments[] = [
+            'origenFila' => $origenFila,
+            'origenColumna' => chr(64+$origenColumna),
+            'destiFila' => $destiFila,
+            'destiColumna' => chr(64+$destiColumna),
+        ];
     }
 
     public function finalitzada() {
