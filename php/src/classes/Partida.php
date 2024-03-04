@@ -12,6 +12,7 @@ class Partida {
     private $dobleCaptura = null;
     private $moviments = [];
 
+
     public static $nameTable = 'partida';
 
     public function __construct() {
@@ -19,6 +20,21 @@ class Partida {
         $this->tornActual = "jugador1"; // O tria aleatòriament qui comença
         $this->estatJoc = "en curs";
         $this->guanyador = null;
+    }
+
+    public function setEstatJoc(string $estatJoc): void
+    {
+        $this->estatJoc = $estatJoc;
+    }
+
+    public function getMoviments(): array
+    {
+        return $this->moviments;
+    }
+
+    public function getMoviment($num): array
+    {
+        return $this->moviments[$num];
     }
 
     public function getTauler(): Tauler
@@ -74,7 +90,6 @@ class Partida {
             }
         }
         // Comprova si el moviment és vàlid, realitza el moviment, i actualitza l'estat del joc si cal
-
     }
 
     private function afegirMoviment($origenFila, $origenColumna, $destiFila, $destiColumna) {
@@ -143,14 +158,14 @@ class Partida {
         $moviments = QueryBuilder::sql(Moviment::class, ['idPartida' => $idPartida]);
         $partida = new Partida();
         foreach ($moviments as $moviment) {
-            $partida->moviments = [
+            $partida->moviments[] = [
                 'origenFila' => $moviment->getOrigenFila(),
                 'origenColumna' => $moviment->getOrigenColumna(),
                 'destiFila' => $moviment->getDestiFila(),
                 'destiColumna' => $moviment->getDestiColumna(),
             ];
         }
-        $partida->estatJoc = 'acabat';
+        $partida->estatJoc = 'reproduint';
         return $partida;
     }
 

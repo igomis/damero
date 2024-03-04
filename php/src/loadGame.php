@@ -12,6 +12,7 @@ if (!$id) {
 
 $partida = Partida::recuperarPartida($id);
 $_SESSION['partida'] = serialize($partida);
+$_SESSION['moviment'] = 0;
 header('Location: /index.php');
 
 
