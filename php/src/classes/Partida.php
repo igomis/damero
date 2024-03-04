@@ -12,6 +12,8 @@ class Partida {
     private $dobleCaptura = null;
     private $moviments = [];
 
+    public static $nameTable = 'partida';
+
     public function __construct() {
         $this->tauler = new Tauler(); // Suposem que tens una classe Tauler
         $this->tornActual = "jugador1"; // O tria aleatòriament qui comença
@@ -84,6 +86,7 @@ class Partida {
         ];
     }
 
+
     public function finalitzada() {
         return $this->estatJoc === "acabat";
     }
@@ -118,5 +121,37 @@ class Partida {
     }
 
 
-    // Mètodes addicionals segons necessari, com ara getters per l'estat del joc, qui té el torn, etc.
+    // Mètodes addicionals per la partida
+    public function desarMoviments() {
+        $partida = QueryBuilder::insert(Game::class, [
+            'idUser' => $_SESSION['userId'],
+        ]);
+        foreach ($this->moviments as $key => $moviment) {
+            QueryBuilder::insert(Moviment::class, [
+                'ordre' => $key,
+                'origenFila' => $moviment['origenFila'],
+                'origenColumna' => $moviment['origenColumna'],
+                'destiFila' => $moviment['destiFila'],
+                'destiColumna' => $moviment['destiColumna'],
+                // Assumeix que tens un camp 'partidaId' per relacionar el moviment amb la partida
+                'idPartida' => $partida, // Suposant que la partida té un atribut 'id'
+            ]);
+        }
+    }
+
+    public static function recuperarPartida($idPartida){
+        $moviments = QueryBuilder::sql(Moviment::class, ['idPartida' => $idPartida]);
+        $partida = new Partida();
+        foreach ($moviments as $moviment) {
+            $partida->moviments = [
+                'origenFila' => $moviment->getOrigenFila(),
+                'origenColumna' => $moviment->getOrigenColumna(),
+                'destiFila' => $moviment->getDestiFila(),
+                'destiColumna' => $moviment->getDestiColumna(),
+            ];
+        }
+        $partida->estatJoc = 'acabat';
+        return $partida;
+    }
+
 }

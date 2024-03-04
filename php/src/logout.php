@@ -1,6 +1,7 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'].'/load.php';
-use BatBook\User;
+session_start();
+unset($_SESSION['userId']);
+unset($_SESSION['partida']);
 
-User::logout();
+
 header("Location: index.php");
